@@ -1,19 +1,33 @@
 class Character {
-  constructor() {
+  constructor(props) {
+    this.name = props.name
+    this.hp = props.hp
+    this.initialHp = props.initialHp
+    this.mp = props.mp
+    this.initialMp = props.initialMp
+    this.offensePower = props.offensePower
+    this.defencePower = props.defencePower
   }
 
   showStatus() {
-    /* 
-      キャラクターの名前、HP、MPを表示する。
-    */
+    const mainEl = document.getElementById('main');
+    mainEl.innerHTML = `<p>キャラクター名: ${this.name} 体力: ${this.hp} 魔法力: ${this.mp}</p>`
   }
 
   attack(defender) {
-    /*
-      キャラクターが死んでいる場合は攻撃出来ないので、それを表示する。
-      死んでいない場合は相手に与えたダメージを表示。
-      相手が死んだ場合は相手に与えたダメージと死んだことを表示する。 
-    */
+    const mainEl = document.getElementById('main');
+    if (this.hp <= 0) {
+      mainEl.innerHTML = `<p>${this.name}は死んでいるので攻撃できません。</p>`
+    }
+    if (defender.hp <= 0) {
+      mainEl.innerHTML = `<p>${defender.name}は死んでいるので攻撃できません。</p>`
+    }
+    const damage = calcAttackDamage(defender);
+    if (defender.hp <= 0) {
+      mainEl.innerHTML = `<p>${this.name}が${defender.name}に${damage}のダメージ。${defender.name}は死にました。</p>`
+    } else {
+      mainEl.innerHTML = `<p>${this.name}が${defender.name}に${damage}のダメージ。</p>`
+    }
   }
 
   calcAttackDamage(defender) {
@@ -21,16 +35,20 @@ class Character {
       ダメージは単純に攻撃力から防御力を引いて計算する。
       ダメージが0未満の場合は、最低のダメージ1を与える。
     */
+    let damage = this.offensePower - defender.defencePower;
+    if (damage < 0) {
+      damage = 1;
+    }
   }
 }
 
 class Sorcerer extends Character {
-  constructor() {
-    
+  constructor(props) {
+    super(props);
   }
 
   healSpell(target) {
-    /* 
+    /*
       回復魔法は3のMPを消費する。
       相手のHPを15回復する。
       魔法使いが死んでいる場合はその旨を表示する。
@@ -40,7 +58,7 @@ class Sorcerer extends Character {
   }
 
   fireSpell(target) {
-    /* 
+    /*
       攻撃魔法は2のMPを消費する。
       相手に10のダメージを与える。
       魔法使いが死んでいる場合はその旨を表示する。
