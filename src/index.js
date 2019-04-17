@@ -31,10 +31,6 @@ class Character {
   }
 
   calcAttackDamage(defender) {
-    /*
-      ダメージは単純に攻撃力から防御力を引いて計算する。
-      ダメージが0未満の場合は、最低のダメージ1を与える。
-    */
     let damage = this.offensePower - defender.defencePower;
     if (damage < 0) {
       damage = 1;
@@ -48,23 +44,38 @@ class Sorcerer extends Character {
   }
 
   healSpell(target) {
-    /*
-      回復魔法は3のMPを消費する。
-      相手のHPを15回復する。
-      魔法使いが死んでいる場合はその旨を表示する。
-      相手が死んでいる場合は回復が出来ないためその旨を表示する。
-      MPが足りない場合はその旨を表示する。
-    */
+    const mainEl = document.getElementById('main');
+    this.mp -= 3;
+    target.hp += 15;
+    mainEl.innerHTML = `<p>${this.name}の回復魔法。${target.name}の体力が15回復しました。</p>`
+    if (this.hp <= 0) {
+      mainEl.innerHTML = `<p>${this.name}は死んでいます。</p>`
+    }
+    if (target.hp <= 0) {
+      mainEl.innerHTML = `<p>${target.name}は死んでいます。体力を回復できません。</p>`
+    }
+    if (this.mp < 3) {
+      mainEl.innerHTML = `<p>${this.name}の魔法力が足りません。</p>`
+    }
   }
 
   fireSpell(target) {
-    /*
-      攻撃魔法は2のMPを消費する。
-      相手に10のダメージを与える。
-      魔法使いが死んでいる場合はその旨を表示する。
-      相手が死んでいる場合は攻撃が出来ないためその旨を表示する。
-      MPが足りない場合はその旨を表示する。
-    */
+    const mainEl = document.getElementById('main');
+    this.mp -= 2;
+    target.hp -= 10;
+    mainEl.innerHTML = `<p>${this.name}の攻撃魔法。${target.name}に10のダメージ。</p>`
+    if (target.hp <= 0) {
+      mainEl.innerHTML = `<p>${target.name}は死にました。</p>`
+    }
+    if (this.hp <= 0) {
+      mainEl.innerHTML = `<p>${this.name}は死んでいます。</p>`
+    }
+    if (target.hp <= 0) {
+      mainEl.innerHTML = `<p>${target.name}は死んでいます。攻撃できません。</p>`
+    }
+    if (this.mp < 2) {
+      mainEl.innerHTML = `<p>${this.name}の魔法力が足りません。</p>`
+    }
   }
 }
 
