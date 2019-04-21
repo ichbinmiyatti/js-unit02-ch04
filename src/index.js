@@ -32,7 +32,7 @@ class Character {
 
   calcAttackDamage(defender) {
     let damage = this.offensePower - defender.defencePower;
-    if (damage < 0) {
+    if (damage <= 0) {
       damage = 1;
     }
   }
@@ -45,9 +45,11 @@ class Sorcerer extends Character {
 
   healSpell(target) {
     const mainEl = document.getElementById('main');
-    this.mp -= 3;
-    target.hp += 15;
-    mainEl.innerHTML = `<p>${this.name}の回復魔法。${target.name}の体力が15回復しました。</p>`
+    if (this.mp >= 3) {
+      this.mp -= 3;
+      target.hp += 15;
+      mainEl.innerHTML = `<p>${this.name}の回復魔法。${target.name}の体力が15回復しました。</p>`
+    }
     if (this.hp <= 0) {
       mainEl.innerHTML = `<p>${this.name}は死んでいます。</p>`
     }
@@ -61,9 +63,11 @@ class Sorcerer extends Character {
 
   fireSpell(target) {
     const mainEl = document.getElementById('main');
-    this.mp -= 2;
-    target.hp -= 10;
-    mainEl.innerHTML = `<p>${this.name}の攻撃魔法。${target.name}に10のダメージ。</p>`
+    if (this.mp >= 2) {
+      this.mp -= 2;
+      target.hp -= 10;
+      mainEl.innerHTML = `<p>${this.name}の攻撃魔法。${target.name}に10のダメージ。</p>`
+    }
     if (target.hp <= 0) {
       mainEl.innerHTML = `<p>${target.name}は死にました。</p>`
     }
